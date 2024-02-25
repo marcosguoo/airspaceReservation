@@ -55,8 +55,8 @@ def run_simulation(grid_size, n_agents):
     failed_bidders = [agent for agent in agents if agent.path is None]
 
     total_blocks_traveled = sum(len(agent.path) for agent in successful_bidders)
-    successful_bids = len(successful_bidders)  # Number of successful bids
-    total_bids = n_agents  # Total number of bids is the same as the number of agents
+    successful_bids = len(successful_bidders)
+    total_bids = n_agents
     percentage_successful = round((successful_bids / total_bids) * 100, 2) if total_bids > 0 else 0.0
 
 
@@ -65,31 +65,28 @@ def run_simulation(grid_size, n_agents):
 def simulate_for_ratio(max_agent_to_segment_ratio, simulations_per_ratio):
     results = []
     for i in range(simulations_per_ratio):
-        grid_size = random.randint(78, 390)  # 78 = 1km block size; 390 = 100m block size
+        grid_size = random.randint(78, 390)
         total_segments = grid_size ** 2
-        # max_agents = int(total_segments * max_agent_to_segment_ratio)
 
         n_agents = int(grid_size * max_agent_to_segment_ratio) 
 
         result = run_simulation(grid_size, n_agents)
         results.append(result)
 
-        # Print statement indicating completion of each simulation run
         print(f"Simulation {i + 1}/{simulations_per_ratio} completed (Ratio: {max_agent_to_segment_ratio}, Grid Size: {grid_size}, Agents: {n_agents})")
 
     return results
 
 def main():
-    ratio_range = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95]  # Define a range of ratios to test
-    simulations_per_ratio = 100  # Number of simulations to run for each ratio
+    ratio_range = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95]
+    simulations_per_ratio = 100
 
     all_results = []
     for ratio in ratio_range:
         ratio_results = simulate_for_ratio(ratio, simulations_per_ratio)
         for result in ratio_results:
-            all_results.append((ratio,) + result)  # Adding the ratio to the result tuple
+            all_results.append((ratio,) + result)
 
-    # Writing results to CSV
     with open('simulation_results_ratios.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(['Ratio', 'Grid Size', 'Number of Agents', 'Total Blocks Traveled', 'Number of Failed Bids', 'Successful Number of Bids', 'Total Bids', 'Successful Bids Percentage'])

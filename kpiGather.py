@@ -2,7 +2,6 @@ import time
 import csv
 from web3 import Web3
 
-# Connect to Alchemy
 alchemy_url = 'https://eth-mainnet.g.alchemy.com/v2/iFI1iCMW5h656qZ-jr-zqaRjnMh5DCbR'
 w3 = Web3(Web3.HTTPProvider(alchemy_url))
 
@@ -24,7 +23,6 @@ def analyze_block(block):
     for tx in block.transactions:
         total_gas_price += tx.gasPrice
         transaction_hashes.append(tx.hash.hex())
-        # Check if transaction receipt status is 0 (failed)
         receipt = w3.eth.get_transaction_receipt(tx.hash)
         if receipt.status == 0:
             failed_transaction_count += 1
@@ -63,5 +61,4 @@ def monitor_network():
     write_to_csv(analysis)
     print(f"Data for block {block_number} saved.")
 
-# Start monitoring
 monitor_network()
